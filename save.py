@@ -1,7 +1,5 @@
 from os import write
-from re import findall, search
-import re
-from typing import Text
+from typing import Dict, Text
 from bs4 import BeautifulSoup
 from html.parser import HTMLParser
 import requests
@@ -9,10 +7,12 @@ import re
 import csv
 from csv import DictWriter
 import pathlib
+from typing import Dict
+import module
 
 
 page = requests.get(
-    'http://books.toscrape.com/catalogue/tipping-the-velvet_999/index.html'
+    'https://books.toscrape.com/catalogue/scott-pilgrims-precious-little-life-scott-pilgrim-1_987/index.html'
 )
 if page.status_code == requests.codes.ok:
 
@@ -35,27 +35,10 @@ if page.status_code == requests.codes.ok:
     )
     product_description = (
         page.find('h2').find_next('p').text
-    )  # mettre triple quillemets
+    )  
     category = page.find_all('li')[1].text
     image_url = page.find('img')['src']
-    f = (
-        product_page_url,
-        title,
-        upc,
-        price_including_tax,
-        price_excluding_tax,
-        number_available,
-        review_rating,
-        product_description,
-        category,
-        image_url,
-    )
-    print(f)
-with open('test.csv', 'w', newline='') as csvfile:
-
-    list_item = csv.writer(csvfile, delimiter=' ', quotechar='|')
-    list_item.writerows(
-        ('title', 'upc', 'price_including_tax', 'price_excluding_tax')
-    )
-
-    list_item.writerows([f])
+    data = {'product_page_url':product_page_url,'title':title,'upc':upc,'price_including_tax':price_including_tax,'price_excluding_tax':price_excluding_tax,'number_available':number_available,'review_rating':review_rating,'product_description':product_description,'category':category,'image_url':image_url}
+    
+    # fonction final_csv create csv 
+    module.final_csv(data) 
