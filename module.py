@@ -2,15 +2,12 @@ import requests
 from bs4 import BeautifulSoup
 from csv import DictWriter
 
-url= 'https://books.toscrape.com/catalogue/sharp-objects_997/index.html'
+# list les url 
+def page_catalogue(numero):
 
-
-
-
-def page_catalogue(my_list):
-    page_num = 'page-' + my_list + '.html'
-    my_url = 'https://books.toscrape.com/catalogue/category/books_1/'+ page_num
-    print (my_url)
+    page_num = (numero + 1)
+    my_url = 'https://books.toscrape.com/catalogue/category/books_1/page-{}.html'.format(page_num)
+    return my_url
 
 
 
