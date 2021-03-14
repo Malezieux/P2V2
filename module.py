@@ -2,12 +2,30 @@ import requests
 from bs4 import BeautifulSoup
 from csv import DictWriter
 
-# list les url 
-def page_catalogue(numero):
 
-    page_num = (numero + 1)
-    my_url = 'https://books.toscrape.com/catalogue/category/books_1/page-{}.html'.format(page_num)
-    return my_url
+
+
+def list_item(url):
+    page = requests.get(
+        url
+        )
+    if page.status_code == requests.codes.ok:
+            page = BeautifulSoup(page.content, 'html.parser')
+    for div in page.select('h3 a'):
+            list_url= 'https://books.toscrape.com/catalogue/'+(div.get('href'))[6:]
+            print (list_url)
+
+
+def next_url(url):
+    page = requests.get(
+        url
+        )
+    if page.status_code == requests.codes.ok:
+            page = BeautifulSoup(page.content, 'html.parser')
+    url_suite = url[0:-10] + page.find('a', text='next').get('href')
+    return(url_suite)
+        
+
 
 
 

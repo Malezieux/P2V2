@@ -13,7 +13,7 @@ import module
 url= '(module.page_catalogue(5))'
 #url='https://books.toscrape.com/catalogue/scott-pilgrims-precious-little-life-scott-pilgrim-1_987/index.html'
 
-page = requests.get(url)
+page = requests.get(module.next_url)
 if page.status_code == requests.codes.ok:
     page = BeautifulSoup(page.content, 'html.parser')
 
