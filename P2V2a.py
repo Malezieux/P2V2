@@ -10,15 +10,15 @@ from csv import DictWriter
 import pathlib
 from typing import Dict
 import module
-url= '(module.page_catalogue(5))'
-#url='https://books.toscrape.com/catalogue/scott-pilgrims-precious-little-life-scott-pilgrim-1_987/index.html'
 
-page = requests.get(module.next_url)
+url='https://books.toscrape.com/catalogue/scott-pilgrims-precious-little-life-scott-pilgrim-1_987/index.html'
+
+page = requests.get(url)
 if page.status_code == requests.codes.ok:
     page = BeautifulSoup(page.content, 'html.parser')
 
 
-    product_page_url = module.page_catalogue
+    product_page_url = url
     title = page.find('h1').text
     upc = page.find('th', text='UPC').find_next('td').text
     price_including_tax = (
