@@ -1,16 +1,9 @@
-from os import write
-from typing import Dict, Text
-from bs4 import BeautifulSoup
-from html.parser import HTMLParser
-import requests
-import urllib.request
-import re
-import csv
-from csv import DictWriter
-import pathlib
-from typing import Dict
-import module
 
+import requests
+from bs4 import BeautifulSoup
+import re
+import urllib
+from csv import DictWriter
 
 
 
@@ -19,11 +12,10 @@ def list_url(url):
         url
         )
     if page.status_code == requests.codes.ok:
-            page = BeautifulSoup(page.content, 'html.parser')
+        page = BeautifulSoup(page.content, 'html.parser')
     for div in page.select('h3 a'):
-            list = 'https://books.toscrape.com/catalogue/'+(div.get('href'))[6:]
-            return (list)
-
+        list = 'https://books.toscrape.com/catalogue/'+(div.get('href'))[6:]
+        return (list)
 
 def next_url(url):
     page = requests.get(
@@ -67,7 +59,7 @@ def list_item (i):
         data = {'product_page_url':product_page_url,'title':title,'upc':upc,'price_including_tax':price_including_tax,'price_excluding_tax':price_excluding_tax,'number_available':number_available,'review_rating':review_rating,'product_description':product_description,'category':category,'image_url':image_url}
         
         # fonction final_csv create csv 
-        module.final_csv(data) 
+        final_csv(data) 
         
 
 

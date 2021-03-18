@@ -1,15 +1,5 @@
-from os import write
-from typing import Dict, Text
-from bs4 import BeautifulSoup
-from html.parser import HTMLParser
 import requests
-import urllib.request
-import re
-import csv
-from csv import DictWriter
-import pathlib
-from typing import Dict
-import module
+import bs4
 
 url='https://books.toscrape.com/catalogue/scott-pilgrims-precious-little-life-scott-pilgrim-1_987/index.html'
 
