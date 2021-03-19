@@ -6,7 +6,7 @@ import urllib
 from csv import DictWriter
 
 
-
+# select all url book by page
 def list_url(url):
     page = requests.get(
         url
@@ -14,9 +14,10 @@ def list_url(url):
     if page.status_code == requests.codes.ok:
         page = BeautifulSoup(page.content, 'html.parser')
     for div in page.select('h3 a'):
-        list = 'https://books.toscrape.com/catalogue/'+(div.get('href'))[6:]
-        return (list)
+        list_url_page = 'https://books.toscrape.com/catalogue/'+(div.get('href'))[6:]
+        return (list_url_page)
 
+# select url neext page for liste_url
 def next_url(url):
     page = requests.get(
         url
@@ -26,6 +27,7 @@ def next_url(url):
     url_suite = url[0:-10] + page.find('a', text='next').get('href')
     return(url_suite)
 
+# select all item by book
 def list_item (i):
 
     page = requests.get(i)
@@ -59,14 +61,14 @@ def list_item (i):
         data = {'product_page_url':product_page_url,'title':title,'upc':upc,'price_including_tax':price_including_tax,'price_excluding_tax':price_excluding_tax,'number_available':number_available,'review_rating':review_rating,'product_description':product_description,'category':category,'image_url':image_url}
         
         # fonction final_csv create csv 
-        final_csv(data) 
+        final_csv(data)
         
 
 
 
 
 def final_csv(data):
-    with open('testh.csv', 'w', newline='', encoding='UTF-8') as csvfile:
+    with open('test.csv', 'w', newline='', encoding='UTF-8') as csvfile:
         fieldnames=['product_page_url','title', 'upc', 'price_including_tax', 'price_excluding_tax', 'number_available', 'review_rating', 'product_description', 'category', 'image_url']
         list_item = DictWriter(csvfile, delimiter='|', fieldnames=fieldnames, quotechar='|')
     #for item in data:
