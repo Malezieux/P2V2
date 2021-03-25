@@ -13,9 +13,10 @@ def list_url(url):
         )
     if page.status_code == requests.codes.ok:
         page = BeautifulSoup(page.content, 'html.parser')
+    list_url_page = []
     for div in page.select('h3 a'):
-        list_url_page = 'https://books.toscrape.com/catalogue/'+(div.get('href'))[6:]
-        return (list_url_page)
+        list_url_page.append('https://books.toscrape.com/catalogue/'+(div.get('href'))[6:])
+    return list_url_page
 
 # select url neext page for liste_url
 def next_url(url):
@@ -25,14 +26,14 @@ def next_url(url):
     if page.status_code == requests.codes.ok:
             page = BeautifulSoup(page.content, 'html.parser')
     url_suite = url[0:-10] + page.find('a', text='next').get('href')
-    return(url_suite)
+    return url_suite
 
 # select all item by book
 def list_item (i):
 
-    page = requests.get(i)
-    if page.status_code == requests.codes.ok:
-        page = BeautifulSoup(page.content, 'html.parser')
+        page = requests.get(i)
+        if page.status_code == requests.codes.ok:
+            page = BeautifulSoup(page.content, 'html.parser')
 
 
         product_page_url = i
@@ -61,18 +62,18 @@ def list_item (i):
         data = {'product_page_url':product_page_url,'title':title,'upc':upc,'price_including_tax':price_including_tax,'price_excluding_tax':price_excluding_tax,'number_available':number_available,'review_rating':review_rating,'product_description':product_description,'category':category,'image_url':image_url}
         
         # fonction final_csv create csv 
-        final_csv(data)
-        
+        return data
 
 
 
-
+#export csv
 def final_csv(data):
     with open('test.csv', 'w', newline='', encoding='UTF-8') as csvfile:
         fieldnames=['product_page_url','title', 'upc', 'price_including_tax', 'price_excluding_tax', 'number_available', 'review_rating', 'product_description', 'category', 'image_url']
-        list_item = DictWriter(csvfile, delimiter='|', fieldnames=fieldnames, quotechar='|')
+        list_item_csv = DictWriter(csvfile, delimiter='|', fieldnames=fieldnames, quotechar='|')
     #for item in data:
-        list_item.writeheader()
+        list_item_csv.writeheader()
     
-        list_item.writerow(data)
+        for item in data:
+            list_item_csv.writerow (item)
         print(data)
