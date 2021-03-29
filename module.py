@@ -10,9 +10,9 @@ def list_url(url):
     page = requests.get(url)
     if page.status_code == requests.codes.ok:
         page = BeautifulSoup(page.content, 'html.parser')
-    list_url_page = []
-    for div in page.select('h3 a'):
-        list_url_page.append(
+        list_url_page = []
+        for div in page.select('h3 a'):
+            list_url_page.append(
             'https://books.toscrape.com/catalogue/' + (div.get('href'))[6:]
         )
     return list_url_page
@@ -23,8 +23,9 @@ def next_url(url):
     page = requests.get(url)
     if page.status_code == requests.codes.ok:
         page = BeautifulSoup(page.content, 'html.parser')
-    url_suite = url[0:-10] + page.find('a', text='next').get('href')
-    return url_suite
+        page.find('a', text='next') in page
+        url_suite = url[0:-10] + page.find('a', text='next').get('href')
+        return url_suite
 
 
 # select all item by book
@@ -51,12 +52,11 @@ def list_item(i):
         page.find('th', text='Number of reviews').find_next('td').text
     )
     product_description = page.find('h2').find_next('p').text
-    category = page.find_all('li')[1].text
+    category = page.find_all('li')[2].text[1:-1]
     image_url = page.find('img')['src']
-
+    rep_image = 'C:/Travail/03 Formations/P2V2/rep_image/' + upc + '.jpg'
     image = urllib.request.urlretrieve(
-        'https://books.toscrape.com/' + image_url[6:0], upc + '.jpg'
-    )
+        'https://books.toscrape.com/' + image_url[6:0], rep_image)
     data = {
         'product_page_url': product_page_url,
         'title': title,
