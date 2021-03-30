@@ -23,8 +23,9 @@ def next_url(url):
     page = requests.get(url)
     if page.status_code == requests.codes.ok:
         page = BeautifulSoup(page.content, 'html.parser')
-        page.find('a', text='next') in page
-        url_suite = url[0:-10] + page.find('a', text='next').get('href')
+        url_suite = []
+        for li in page.find('a', text='next'):
+            url_suite.append(url[0:-10] + page.find('a', text='next').get('href'))
         return url_suite
 
 
