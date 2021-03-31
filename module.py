@@ -6,7 +6,7 @@ from csv import DictWriter
 
 
 # select all url book by page
-def list_url(url):
+def list_url_book_by_page(url):
     page = requests.get(url)
     if page.status_code == requests.codes.ok:
         page = BeautifulSoup(page.content, 'html.parser')
@@ -18,19 +18,17 @@ def list_url(url):
     return list_url_page
 
 
-# select url neext page for liste_url
-def next_url(url):
+# select url next page 
+def next_url_page(url):
     page = requests.get(url)
     if page.status_code == requests.codes.ok:
         page = BeautifulSoup(page.content, 'html.parser')
-        url_suite = []
-        for li in page.find('a', text='next'):
-            url_suite.append(url[0:-10] + page.find('a', text='next').get('href'))
-        return url_suite
+        next_url = (url[0:-10] + page.find('a', text='next').get('href'))
+        return next_url
 
 
 # select all item by book
-def list_item(i):
+def list_item_by_book(i):
 
     page = requests.get(i)
     if page.status_code == requests.codes.ok:
