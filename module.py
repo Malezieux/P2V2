@@ -97,3 +97,14 @@ def final_csv(data):
         for item in data:
             list_item_csv.writerow(item)
         print(data)
+
+def category(url):
+    page = requests.get(url)
+    page.raise_for_status()
+    soup = BeautifulSoup(page.content, 'html.parser')
+    category_urls = []
+    side_categories = soup.find('div', class_='side_categories')
+    for a in side_categories.find_all('a'):
+        category_urls.append('https://books.toscrape.com/' + a.get('href'))
+    return category_urls
+
