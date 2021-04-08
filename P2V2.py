@@ -8,13 +8,16 @@ url2 = 'https://books.toscrape.com/index.html'
 
 url_category = module.category(url2)
 url_book = []
+ul = []
+items_book = []
 for a in url_category:
     url_book.append(a)
-    ul = []
+
     for i in url_book:
         ul.append(module.list_url_book_by_page(i))
-    
-print (url_book)
-f = open("test.txt", "w")
-print(f.readline(ul))
-f.close() 
+        for a in ul:
+            items_book.append(module.list_item_by_book(a))
+
+print (items_book)  
+
+#print (ul)
