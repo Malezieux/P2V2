@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-import urllib
+import urllib.request
 from csv import DictWriter
 
 
@@ -11,9 +11,11 @@ def list_url_book_by_page(url):
     if page.status_code == requests.codes.ok:
         page = BeautifulSoup(page.content, 'html.parser')
         list_url_page = []
+        
         for div in page.select('h3 a'):
             list_url_page.append(
-            'https://books.toscrape.com/catalogue/' + (div.get('href'))[6:]
+
+            'https://books.toscrape.com/catalogue/' + (div.get('href'))[9:]
         )
     return list_url_page
 
@@ -29,7 +31,6 @@ def next_url_page(url):
 
 # select all item by book
 def list_item_by_book(i):
-
     page = requests.get(i)
     if page.status_code == requests.codes.ok:
         page = BeautifulSoup(page.content, 'html.parser')
@@ -107,4 +108,5 @@ def category(url):
     for a in side_categories.find_all('a'):
         category_urls.append('https://books.toscrape.com/' + a.get('href'))
     return category_urls
+
 

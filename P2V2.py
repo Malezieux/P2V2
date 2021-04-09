@@ -8,16 +8,24 @@ url2 = 'https://books.toscrape.com/index.html'
 
 url_category = module.category(url2)
 url_book = []
-ul = []
 items_book = []
+ul = []
+
 for a in url_category:
-    url_book.append(a)
+    url_book.append(module.list_url_book_by_page(a))
+for i in url_book[1]:
+    ul.append(module.list_item_by_book(i))
 
-    for i in url_book:
-        ul.append(module.list_url_book_by_page(i))
-        for a in ul:
-            items_book.append(module.list_item_by_book(a))
+module.final_csv(ul)
 
-print (items_book)  
+#for i in url_book:
+#ul.append(module.list_url_book_by_page(i))
+    
+#for z in ul:
+#items_book.append(module.list_item_by_book(z))
+#print (a)
+print (url_category)
+#print (url_book)
+#print (items_book)  
 
 #print (ul)
