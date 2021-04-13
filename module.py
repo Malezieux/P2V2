@@ -5,18 +5,31 @@ import urllib.request
 from csv import DictWriter
 
 
+# select all url category
+def category(url):
+    page = requests.get(url)
+    if page.status_code == requests.codes.ok:
+        soup = BeautifulSoup(page.content, 'html.parser')
+
+    category_urls = []
+    side_categories = soup.find('div', class_='side_categories')
+    for a in side_categories.find_all('a'):
+        category_urls.append('https://books.toscrape.com/' + a.get('href'))
+    return category_urls
+
+
 # select all url book by page
 def list_url_book_by_page(url):
     page = requests.get(url)
-    if page.status_code == requests.codes.ok:
-        page = BeautifulSoup(page.content, 'html.parser')
-        list_url_page = []
-        
-        for div in page.select('h3 a'):
-            list_url_page.append(
+    page.raise_for_status()
+    soup = BeautifulSoup(page.content, 'html.parser')
+    list_url_page = []
+    for div in soup.select('h3 a'):
+        list_url_page.append(
 
             'https://books.toscrape.com/catalogue/' + (div.get('href'))[9:]
         )
+        
     return list_url_page
 
 
@@ -25,17 +38,19 @@ def next_url_page(url):
     page = requests.get(url)
     if page.status_code == requests.codes.ok:
         page = BeautifulSoup(page.content, 'html.parser')
-        next_url = (url[0:-10] + page.find('a', text='next').get('href'))
+        a = url[:-10]
+        if page.find('a', text='next'):
+            next_url = a + ('page-2.html')
         return next_url
 
 
 # select all item by book
-def list_item_by_book(i):
-    page = requests.get(i)
-    if page.status_code == requests.codes.ok:
-        page = BeautifulSoup(page.content, 'html.parser')
+def list_item_by_book(url):
+    page = requests.get(url)
+    page.raise_for_status()
+    page = BeautifulSoup(page.content, 'html.parser')
 
-    product_page_url = i
+    product_page_url = url
     title = page.find('h1').text
     upc = page.find('th', text='UPC').find_next('td').text
     price_including_tax = (
@@ -56,7 +71,7 @@ def list_item_by_book(i):
     image_url = page.find('img')['src']
     rep_image = 'C:/Travail/03 Formations/P2V2/rep_image/' + upc + '.jpg'
     image = urllib.request.urlretrieve(
-        'https://books.toscrape.com/' + image_url[6:0], rep_image)
+        'https://books.toscrape.com/' + image_url[6:], rep_image)
     data = {
         'product_page_url': product_page_url,
         'title': title,
@@ -99,14 +114,6 @@ def final_csv(data):
             list_item_csv.writerow(item)
         print(data)
 
-def category(url):
-    page = requests.get(url)
-    page.raise_for_status()
-    soup = BeautifulSoup(page.content, 'html.parser')
-    category_urls = []
-    side_categories = soup.find('div', class_='side_categories')
-    for a in side_categories.find_all('a'):
-        category_urls.append('https://books.toscrape.com/' + a.get('href'))
-    return category_urls
+
 
 
