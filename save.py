@@ -158,27 +158,3 @@ if ask_category in dico_categorie:
         items_book.append(module.list_item_by_book(url))
     print(len(items_book))
 
-for lien [2:] in url_category[1:]:
-            response = requests.get(lien)
-            if response.ok:
-                    lien = lien.replace("index.html", "page-1.html")
-                    r = requests.get(lien)
-                    print(lien)
-                    if r.ok:
-                        i = 1
-                        while r.ok:
-                            i += 1
-                            lien = lien.replace(
-                                "page-" + str(i - 1) + ".html",
-                                "page-" + str(i) + ".html",
-                            )
-                            r = requests.get(
-                                lien
-                            )  # Indispensable pour chercher une nouvelle categorie sinon pagine indéfiniment sur "mystery"
-                            list_url_book_by_page.append(lien)
-                            # livre(urlDuLivre,cat)
-                        pass
-
-                    else:
-                        lien = lien.replace("page-1.html", "index.html")
-module.final_csv(items_book)
