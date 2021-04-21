@@ -1,21 +1,12 @@
 from bs4 import BeautifulSoup
-from module import category
+from module import category, list_url_book_by_page
 import module
-#url de depart
+import requests
 
-url_first = 'https://books.toscrape.com/index.html'
+# url de depart
 
+url_first = 'https://books.toscrape.com/'
 url_category = module.category(url_first)
-url_book = []
-items_book = []
+print(url_category)
 
-for url in url_category[1:]:
-    url_book = module.list_url_book_by_page (url)
-    for url in url_book:
-        items_book.append(module.list_item_by_book(url))
 
-module.final_csv(items_book)
-
-print (url_category)
-print (len(url_book))
-print (items_book)  
