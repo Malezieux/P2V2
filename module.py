@@ -49,8 +49,6 @@ def list_url_book_by_page(url):
         list_url_page.append(
             'https://books.toscrape.com/catalogue/' + (div.get('href'))
         )
-        
-
     return list_url_page
 
 
