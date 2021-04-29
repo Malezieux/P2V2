@@ -3,64 +3,45 @@ from bs4 import BeautifulSoup
 import re
 import urllib.request
 from csv import DictWriter
+from bs4 import BeautifulSoup
 
-
-# select all url category
+# select all categorie url
 def category(url):
     page = requests.get(url)
     if page.status_code == requests.codes.ok:
         soup = BeautifulSoup(page.content, 'html.parser')
-        category_urls = []
         side_categories = soup.find('div', class_='side_categories')
-        for a in side_categories.find_all('a'):
+        category_urls = []
+        for a in side_categories.find_all('a')[1:]:
             category_urls.append('https://books.toscrape.com/' + a.get('href'))
-            
-            
-            for lien in category_urls[1:]:
-                response = requests.get(lien)
-                if response.ok:
-                    lien = lien.replace('index.html', 'page-1.html')
-                    r = requests.get(lien)
-                    if r.ok:
-                        i = 1
-                        url_cat = []
-                        url_cat.append(lien)
-                        while r.ok:
-                            i += 1
-                            url_cat_next = []
-                            lien = lien.replace('page-' + str(i - 1) + '.html','page-' + str(i) + '.html',)
-                            r = requests.get(lien) 
-                            if r.ok:
-                            
-                                url_cat_next.append(lien)
-                                pass
-                
-        return (url_cat, url_cat_next)
+        return category_urls
 
 
-# select all url book by page
-def list_url_book_by_page(url):
-    page = requests.get(url)
-    page.raise_for_status()
-    soup = BeautifulSoup(page.content, 'html.parser')
-    list_url_page = []
-    
-    for div in soup.select('h3 a'):
-        list_url_page.append(
-            'https://books.toscrape.com/catalogue/' + (div.get('href'))
-        )
-    return list_url_page
-
-
-# select url next page
+# select next page
 def next_url_page(url):
     page = requests.get(url)
     if page.status_code == requests.codes.ok:
-        page = BeautifulSoup(page.content, 'html.parser')
-        a = url[:-10]
-        if page.find('a', text='next'):
-            next_url = a + ('page-2.html')
-        return next_url
+        soup = BeautifulSoup(page.content, 'html.parser')
+        # for text_next in soup:
+        next_url = []
+        if soup.find('a', text='next'):
+            next_url.append(url.replace('index.html', 'page-2.html'))
+            return next_url
+        else:
+            pass
+
+
+# select all url book by categorie page
+def list_url_book_by_page(url):
+    page = requests.get(url)
+    if page.status_code == requests.codes.ok:
+        soup = BeautifulSoup(page.content, 'html.parser')
+        list_book_page = []
+        for div in soup.select('h3 a'):
+            list_book_page.append(
+                'https://books.toscrape.com/catalogue/' + (div.get('href')[9:])
+            )
+        return list_book_page
 
 
 # select all item by book
