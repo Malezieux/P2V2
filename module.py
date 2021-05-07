@@ -14,7 +14,17 @@ def category(url):
         category_urls = []
         for a in side_categories.find_all('a')[1:]:
             category_urls.append('https://books.toscrape.com/' + a.get('href'))
-        return category_urls
+            list_book_page = []
+            for url in category_urls:
+                page = requests.get(url)
+                if page.status_code == requests.codes.ok:
+                    soup = BeautifulSoup(page.content, 'html.parser')
+                    
+                    for div in soup.select('h3 a'):
+                        list_book_page.append(
+                'https://books.toscrape.com/catalogue/' + (div.get('href')[9:])
+            )
+        return list_book_page
 
 
 # select next page
@@ -29,19 +39,6 @@ def next_url_page(url):
             return next_url
         else:
             pass
-
-
-# select all url book by categorie page
-def list_url_book_by_page(url):
-    page = requests.get(url)
-    if page.status_code == requests.codes.ok:
-        soup = BeautifulSoup(page.content, 'html.parser')
-        list_book_page = []
-        for div in soup.select('h3 a'):
-            list_book_page.append(
-                'https://books.toscrape.com/catalogue/' + (div.get('href')[9:])
-            )
-        return list_book_page
 
 
 # select all item by book
