@@ -4,6 +4,7 @@ import re
 import urllib.request
 from csv import DictWriter
 from bs4 import BeautifulSoup
+import pylint
 
 # select all categorie url
 def category(url):
@@ -12,19 +13,36 @@ def category(url):
         soup = BeautifulSoup(page.content, 'html.parser')
         side_categories = soup.find('div', class_='side_categories')
         category_urls = []
-        for a in side_categories.find_all('a')[1:]:
+        for a in side_categories.find_all('a')[1:5]:
             category_urls.append('https://books.toscrape.com/' + a.get('href'))
+<<<<<<< HEAD
             list_book_page = []
+=======
+>>>>>>> 3b17cee (test boucle)
             for url in category_urls:
                 page = requests.get(url)
                 if page.status_code == requests.codes.ok:
                     soup = BeautifulSoup(page.content, 'html.parser')
+<<<<<<< HEAD
                     
                     for div in soup.select('h3 a'):
                         list_book_page.append(
                 'https://books.toscrape.com/catalogue/' + (div.get('href')[9:])
             )
         return list_book_page
+=======
+                    if soup.find('a', text='next'):
+                        category_urls.append(url.replace('index.html', 'page-2.html'))
+                    else:
+                        pass
+            list_book_page = []
+            for div in soup.select('h3 a'):
+                list_book_page.append(
+                    'https://books.toscrape.com/catalogue/' + (div.get('href')[9:])
+                )
+        return category_urls
+>>>>>>> 3b17cee (test boucle)
+
 
 
 # select next page
