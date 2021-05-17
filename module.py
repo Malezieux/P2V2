@@ -15,34 +15,23 @@ def category(url):
         category_urls = []
         for a in side_categories.find_all('a')[1:5]:
             category_urls.append('https://books.toscrape.com/' + a.get('href'))
-<<<<<<< HEAD
-            list_book_page = []
-=======
->>>>>>> 3b17cee (test boucle)
             for url in category_urls:
                 page = requests.get(url)
                 if page.status_code == requests.codes.ok:
                     soup = BeautifulSoup(page.content, 'html.parser')
-<<<<<<< HEAD
-                    
-                    for div in soup.select('h3 a'):
-                        list_book_page.append(
-                'https://books.toscrape.com/catalogue/' + (div.get('href')[9:])
-            )
-        return list_book_page
-=======
                     if soup.find('a', text='next'):
-                        category_urls.append(url.replace('index.html', 'page-2.html'))
+                        category_urls.append(
+                            url.replace('index.html', 'page-2.html')
+                        )
                     else:
                         pass
             list_book_page = []
             for div in soup.select('h3 a'):
                 list_book_page.append(
-                    'https://books.toscrape.com/catalogue/' + (div.get('href')[9:])
+                    'https://books.toscrape.com/catalogue/'
+                    + (div.get('href')[9:])
                 )
         return category_urls
->>>>>>> 3b17cee (test boucle)
-
 
 
 # select next page
