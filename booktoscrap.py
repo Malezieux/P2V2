@@ -1,3 +1,6 @@
+#! /usr/bin/venv python3
+# coding: utf-8
+
 import requests
 from bs4 import BeautifulSoup
 import urllib.request
@@ -5,14 +8,14 @@ from csv import DictWriter
 from bs4 import BeautifulSoup
 import re
 
-# select all category
+# select all category url (page .index.html)
 def category_url(url_first):
     page = requests.get(url_first)
     if page.status_code == requests.codes.ok:
         soup = BeautifulSoup(page.content, 'html.parser')
         side_categories = soup.find('div', class_='side_categories')
         category_urls = []
-        for _ in side_categories.find_all('a')[1:2]:
+        for _ in side_categories.find_all('a')[1:]:
             category_urls.append('https://books.toscrape.com/' + _.get('href'))
         return category_urls
     print(category_urls)
